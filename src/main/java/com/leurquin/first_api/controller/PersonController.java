@@ -3,7 +3,6 @@ package com.leurquin.first_api.controller;
 import com.leurquin.first_api.model.Person;
 import com.leurquin.first_api.service.PersonService;
 import java.util.Optional;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
