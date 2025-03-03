@@ -1,0 +1,243 @@
+openapi: 3.0.3
+info:
+  title: Swagger Person - 1.0
+  description: >-
+    This is a sample Person
+
+
+    Some useful links:
+
+    - [Person
+    repository](https://github.com/MaxenceIT/first-api)
+
+    - [The source API definition for the Person](https://github.com/MaxenceIT/first-api/blob/master/src/main/resources/openapi.yaml)
+
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://person.swagger.io/api/v1
+tags:
+  - name: person
+    description: Everything about Person
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /person:
+    put:
+      tags:
+        - person
+      summary: Update an existing person
+      description: Update an existing person by Id
+      operationId: updatePerson
+      requestBody:
+        description: Update an existent person
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Person'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Person not found
+        '422':
+          description: Validation exception
+      security:
+        - person_auth:
+            - write:persons
+            - read:persons
+    post:
+      tags:
+        - person
+      summary: Add a new person
+      description: Add a new person
+      operationId: addPerson
+      requestBody:
+        description: Create a new person
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Person'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+      security:
+        - person_auth:
+            - write:persons
+            - read:persons
+  /person/{personId}:
+    get:
+      tags:
+        - person
+      summary: Find person by ID
+      description: Returns a single person
+      operationId: getPersonById
+      parameters:
+        - name: personId
+          in: path
+          description: ID of person to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Person not found
+      security:
+        - api_key: []
+        - person_auth:
+            - write:persons
+            - read:persons
+    post:
+      tags:
+        - person
+      summary: Updates a person in the store with form data
+      description: ''
+      operationId: updatePersonWithForm
+      parameters:
+        - name: personId
+          in: path
+          description: ID of person that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: firstName
+          in: query
+          description: FirstName of person that needs to be updated
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          description: LastName of pet that needs to be updated
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid input
+      security:
+        - person_auth:
+            - write:persons
+            - read:persons
+    delete:
+      tags:
+        - person
+      summary: Deletes a person
+      description: delete a person
+      operationId: deletePerson
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: personId
+          in: path
+          description: Person id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid person value
+      security:
+        - person_auth:
+            - write:persons
+            - read:persons
+ 
+  
+components:
+  schemas:
+    Person:
+      required:
+        - firstName
+        - lastName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        firstName:
+          type: string
+          example: maxence
+        lastName:
+          type: string
+          example: Dupond
+      xml:
+        name: person
+    
+  requestBodies:
+    Person:
+      description: Person object that needs to be added
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Person'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Person'
+   
+  securitySchemes:
+    person_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:persons: modify persons
+            read:persons: read persons
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
