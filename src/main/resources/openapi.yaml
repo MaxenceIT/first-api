@@ -233,7 +233,7 @@ components:
       type: oauth2
       flows:
         implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          authorizationUrl: https://person.swagger.io/oauth/authorize
           scopes:
             write:persons: modify persons
             read:persons: read persons
