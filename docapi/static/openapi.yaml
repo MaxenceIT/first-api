@@ -25,7 +25,31 @@ tags:
       description: Find out more
       url: http://swagger.io
 paths:
-  /person:
+  /persons:
+    get:
+      tags:
+        - person
+      summary: List person
+      description: Returns a list of person
+      operationId: getListPerson
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Person not found
+      security:
+        - api_key: [ ]
+        - person_auth:
+            - write:persons
+            - read:persons
     put:
       tags:
         - person
@@ -38,21 +62,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Person'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Person'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Person'
         required: true
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Person'
-            application/xml:
               schema:
                 $ref: '#/components/schemas/Person'
         '400':
@@ -77,21 +92,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Person'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Person'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Person'
         required: true
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Person'
-            application/xml:
               schema:
                 $ref: '#/components/schemas/Person'
         '400':
@@ -102,7 +108,8 @@ paths:
         - person_auth:
             - write:persons
             - read:persons
-  /person/{personId}:
+
+  /persons/{personId}:
     get:
       tags:
         - person
@@ -124,46 +131,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Person'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Person'
         '400':
           description: Invalid ID supplied
         '404':
           description: Person not found
       security:
         - api_key: []
-        - person_auth:
-            - write:persons
-            - read:persons
-    post:
-      tags:
-        - person
-      summary: Updates a person in the store with form data
-      description: ''
-      operationId: updatePersonWithForm
-      parameters:
-        - name: personId
-          in: path
-          description: ID of person that needs to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: firstName
-          in: query
-          description: FirstName of person that needs to be updated
-          schema:
-            type: string
-        - name: lastName
-          in: query
-          description: LastName of pet that needs to be updated
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid input
-      security:
         - person_auth:
             - write:persons
             - read:persons
@@ -213,7 +186,7 @@ components:
           example: maxence
         lastName:
           type: string
-          example: Dupond
+          example: Dupont
       xml:
         name: person
     
@@ -222,9 +195,6 @@ components:
       description: Person object that needs to be added
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/Person'
-        application/xml:
           schema:
             $ref: '#/components/schemas/Person'
    
